@@ -1,6 +1,8 @@
 package ru.newfirefly.restexample.model;
 
-public enum Permission {
+import java.util.Set;
+
+public enum Permission  {
 
     DEVELOPERS_READ("developers:read"),
     DEVELOPERS_WRITE("developers:write");
