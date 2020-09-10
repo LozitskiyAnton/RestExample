@@ -26,33 +26,33 @@ public class DeveloperController {
     }
 
     private final List<Developer> developerListFromSteam = Stream.of(
-            new Developer((long) 4, "a", "s"),
-            new Developer((long) 5, "d", "f"),
-            new Developer((long) 4, "g", "h"))
+            new Developer(4L, "a", "s"),
+            new Developer(5L, "d", "f"),
+            new Developer(6L, "g", "h"))
             .collect(Collectors.toList());
 
     @GetMapping("/developers")
-    public List<Developer> findAll(){
-        return developerService.findAll();
+    public List<Developer> findAll() {
+        return developerListFromSteam;
+        //return developerService.findAll();
     }
 
     @GetMapping("developers/{id}")
-    public Developer getById(@PathVariable Long id){
+    public Developer getById(@PathVariable Long id) {
         return developerListlist.stream().filter(developer -> developer.getId().equals(id)).findFirst().orElse(null);
     }
 
     @PostMapping("/create")
-    public Developer create(@RequestBody Developer developer){
-        //this.developerListlist.add(developer);
+    public Developer create(@RequestBody Developer developer) {
+        this.developerListFromSteam.add(developer);
         //developerService.save(developer);
         return developer;
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         developerService.delete(id);
     }
-
 
 
 }
