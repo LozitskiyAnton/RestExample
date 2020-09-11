@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import ru.newfirefly.restexample.model.Permission;
 import ru.newfirefly.restexample.model.Role;
 
 @Configuration
@@ -21,9 +22,9 @@ public class SecureConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
        http.authorizeRequests().antMatchers("/json").permitAll()
-       .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole(Role.ADMIN.name(),Role.USER.name())
-       .antMatchers(HttpMethod.POST, "/api/**").hasRole(Role.ADMIN.name())
-       .antMatchers(HttpMethod.DELETE, "/api/**").hasRole(Role.ADMIN.name())
+       .antMatchers(HttpMethod.GET, "/api/**").hasAuthority(Permission.DEVELOPERS_READ.getPermission())
+       .antMatchers(HttpMethod.POST, "/api/**").hasAuthority(Permission.DEVELOPERS_WRITE.getPermission())
+       .antMatchers(HttpMethod.DELETE, "/api/**").hasAuthority(Permission.DEVELOPERS_WRITE.getPermission())
        .anyRequest().authenticated().and().httpBasic()
        ;
        http.csrf().disable();
@@ -35,11 +36,11 @@ public class SecureConfig extends WebSecurityConfigurerAdapter {
                 .builder()
                 .password(passwordEncoder().encode("admin"))
                 .username("admin")
-                .roles(Role.ADMIN.name())
+                .authorities(Role.ADMIN.getAuthorities())
                 .build(), User.builder()
                 .password(passwordEncoder().encode("user"))
                 .username("user")
-                .roles(Role.USER.name()).build()
+                .authorities(Role.USER.getAuthorities()).build()
         );
     }
 
