@@ -1,6 +1,7 @@
 package ru.newfirefly.restexample.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.newfirefly.restexample.model.Developer;
 import ru.newfirefly.restexample.service.DeveloperService;
@@ -38,11 +39,13 @@ public class DeveloperController {
     }
 
     @GetMapping("developers/{id}")
+    @PreAuthorize("hasAuthority('developers:read')")
     public Developer getById(@PathVariable Long id) {
         return developerListlist.stream().filter(developer -> developer.getId().equals(id)).findFirst().orElse(null);
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('developers:write')")
     public Developer create(@RequestBody Developer developer) {
         this.developerListFromSteam.add(developer);
         //developerService.save(developer);
@@ -50,6 +53,7 @@ public class DeveloperController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('developers:write')")
     public void delete(@PathVariable Long id) {
         developerService.delete(id);
     }
